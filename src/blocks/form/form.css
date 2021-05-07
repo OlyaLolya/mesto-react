@@ -1,0 +1,18 @@
+.form{
+  min-width: 280px;
+  background-color: #ffffff;
+  max-width: 288px;
+  padding: 25px 0;
+  text-align: center;
+  border-radius: 10px;
+}
+
+@media screen and (min-width: 1024px){
+  .form{
+    min-width: 430px;
+    max-width: 358px;
+    text-align: start;
+    padding-left: 36px;
+    padding-right: 36px;
+  }
+}
