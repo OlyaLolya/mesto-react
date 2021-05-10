@@ -1,9 +1,8 @@
 import React from "react";
-import '../index.css';
 import {api} from '../utils/Api.js'
 import Card from "./Card";
 
-function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick}) {
+function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick, onDeleteCard}) {
     const [userName, setUserName] = React.useState('Загрузка...');
     const [userDescription, setUserDescription] = React.useState('');
     const [userAvatar, setUserAvatar] = React.useState('');
@@ -16,13 +15,15 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick}) {
                 setUserDescription(userData.about);
                 setUserAvatar(userData.avatar);
             })
-    }, [])
-    React.useEffect(() => {
+            .catch(err => {
+                console.log(err)
+            })
         api.getInitialCards()
             .then(initialCards => {
-                setCards(initialCards.map(info => (
-                    <Card key={info._id} card={info} onCardClick={onCardClick} />
-                )))
+                setCards(initialCards)
+            })
+            .catch(err => {
+                console.log(err)
             })
     }, [])
     return (
@@ -43,7 +44,9 @@ function Main({onEditAvatar, onEditProfile, onAddPlace, onCardClick}) {
             </section>
 
             <section className="cards">
-                {cards}
+                {cards.map(card => (
+                    <Card key={card._id} card={card} onCardClick={onCardClick} onDeleteCard={onDeleteCard}/>
+                ))}
             </section>
         </main>
     )

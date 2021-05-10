@@ -1,5 +1,4 @@
 import React from "react";
-import '../index.css';
 import MestoLogo from '../images/logo-white.svg';
 
 function Header() {

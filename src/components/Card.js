@@ -1,13 +1,12 @@
 import React from "react";
-import '../index.css';
 
-function Card({card, onCardClick}) {
+function Card({card, onCardClick, onDeleteCard}) {
     function handleClick() {
         onCardClick(card);
     }
     return (
         <div className="card">
-            <button type="button" className="card__icon-delete"/>
+            <button type="button" onClick={onDeleteCard} className="card__icon-delete"/>
             <img className="card__image" onClick={handleClick} alt={card.name} src={card.link}/>
             <div className="card__description">
                 <h2 className="card__title">{card.name}</h2>

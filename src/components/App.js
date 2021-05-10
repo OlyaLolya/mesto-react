@@ -1,5 +1,4 @@
 import React from "react";
-import '../index.css';
 import Header from "./Header";
 import Main from "./Main";
 import Footer from "./Footer";
@@ -10,6 +9,7 @@ function App() {
     const [isEditProfilePopupOpen, setIsEditProfilePopupOpen]=React.useState(false);
     const [isAddPlacePopupOpen, setIsAddPlacePopupOpen]=React.useState(false);
     const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen]=React.useState(false);
+    const [isDeletePopupOpen, setIsDeletePopupOpen]=React.useState(false);
     const [isCardPopupOpen, setIsCardPopupOpen]=React.useState(false);
     const [selectedCard, setSelectedCard]=React.useState({});
     const handleEditAvatarClick = () => {
@@ -25,6 +25,7 @@ function App() {
         setIsEditAvatarPopupOpen(false);
         setIsEditProfilePopupOpen(false);
         setIsAddPlacePopupOpen(false);
+        setIsDeletePopupOpen(false);
         setIsCardPopupOpen(false)
     }
     function handleCardClick(card) {
@@ -33,6 +34,9 @@ function App() {
             link: card.link,
             name: card.name,
         })
+    }
+    function handleDeleteCard(){
+        setIsDeletePopupOpen(true)
     }
 
     return (
@@ -43,12 +47,14 @@ function App() {
                 onEditProfile={handleEditProfileClick}
                 onAddPlace={handleAddPlaceClick}
                 onCardClick={handleCardClick}
+                onDeleteCard={handleDeleteCard}
             />
             <Footer />
             <PopupWithForm title={'Редактировать профиль'}
                            isOpen={isEditProfilePopupOpen}
                            onClose={closeAllPopups}
-                           name={'edit'}>
+                           submitText={'Сохранить'}
+                           name={'profile-edit'}>
                 <fieldset className="form__profile-info">
                     <input className="form__input form__input_data_heading" type="text" placeholder="Имя"
                            name="name" id="name-input" required minLength="2" maxLength="40"/>
@@ -62,7 +68,8 @@ function App() {
             <PopupWithForm title={'Новое место'}
                            isOpen={isAddPlacePopupOpen}
                            onClose={closeAllPopups}
-                           name={'add'}>
+                           submitText={'Добавить'}
+                           name={'add-card'}>
                 <fieldset className="form__profile-info">
                     <input className="form__input form__input_card_heading" type="text" placeholder="Название"
                            name="name" id="card-head-input" required minLength="2" maxLength="30"/>
@@ -76,7 +83,8 @@ function App() {
             <PopupWithForm title={'Обновить аватар'}
                            isOpen={isEditAvatarPopupOpen}
                            onClose={closeAllPopups}
-                           name={'avatar'}>
+                           submitText={'Сохранить'}
+                           name={'avatar-edit'}>
                 <fieldset className="form__profile-info">
                     <input className="form__input form__input_avatar_url" type="url"
                            placeholder="Ссылка на аватар"
@@ -84,21 +92,15 @@ function App() {
                     <span className="form__error avatar-url-input-error"/>
                 </fieldset>
             </PopupWithForm>
-            <PopupWithForm title={'Вы уверены?'} name={'delete'}/>
+            <PopupWithForm onClose={closeAllPopups}
+                           isOpen={isDeletePopupOpen}
+                           title={'Вы уверены?'}
+                           submitText={'Да'}
+                           name={'delete'}/>
             <ImagePopup isOpen={isCardPopupOpen}
                         card={selectedCard}
                         onClose={closeAllPopups}
             />
-           {/*
-            <section className="popup " id="popup__delete">
-                <div className="popup__container">
-                    <button type="button" className="popup__icon-close popup__icon-close-delete-form"/>
-                    <form className="form delete-form" name="delete-form" noValidate>
-                        <h2 className="form__header">Вы уверены?</h2>
-                        <input type="submit" className="form__button" value="Да"/>
-                    </form>
-                </div>
-            </section>*/}
         </div>
 );
 }
