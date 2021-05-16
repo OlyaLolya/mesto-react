@@ -21,23 +21,19 @@ function App() {
     const [selectedCard, setSelectedCard] = useState({});
     const [currentUser, setCurrentUser] = useState({name: 'Загрузка...', avatar: loading})
     const [cards, setCards] = useState([]);
-    const [submitText, setSubmitText] = useState('')
     const [currentCard, setCurrentCard] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleEditAvatarClick = () => {
-        setSubmitText('Сохранить')
         setIsEditAvatarPopupOpen(true);
     }
     const handleEditProfileClick = () => {
-        setSubmitText('Сохранить')
         setIsEditProfilePopupOpen(true);
     }
     const handleAddPlaceClick = () => {
-        setSubmitText('Добавить')
         setIsAddPlacePopupOpen(true);
     }
     function handleDeleteCardClick(card) {
-        setSubmitText('Да')
         setIsDeletePopupOpen(true)
         setCurrentCard(card);
     }
@@ -59,7 +55,7 @@ function App() {
     }
 
     function handleUpdateUser(user) {
-        setSubmitText('Сохраняем...')
+        setIsLoading(true);
         api.setUserInfo(user)
             .then(newUserInfo => {
                 setCurrentUser(newUserInfo);
@@ -67,13 +63,17 @@ function App() {
             .then(() => {
                 closeAllPopups();
             })
+            .then(() => {
+                setIsLoading(false)
+            })
             .catch(err => {
+                setIsLoading(false)
                 console.log(err)
             })
     }
 
     function handleUpdateAvatar(avatarUrl) {
-        setSubmitText('Сохраняем...')
+        setIsLoading(true);
         api.changeAvatar(avatarUrl)
             .then(res => {
                 setCurrentUser(res)
@@ -81,7 +81,11 @@ function App() {
             .then(() => {
                 closeAllPopups();
             })
+            .then(() => {
+                setIsLoading(false)
+            })
             .catch(err => {
+                setIsLoading(false)
                 console.log(err)
             })
     }
@@ -95,7 +99,7 @@ function App() {
     }
 
     function handleCardDelete() {
-        setSubmitText('Удаляем...')
+        setIsLoading(true);
         api.deleteCard(currentCard._id)
             .then(() => {
                 let cardsArr = cards.filter(function (item) {
@@ -106,13 +110,17 @@ function App() {
             .then(() => {
                 closeAllPopups();
             })
+            .then(() => {
+                setIsLoading(false)
+            })
             .catch(err => {
+                setIsLoading(false)
                 console.log(err)
             });
     }
 
     function handleAddPlaceSubmit(card) {
-        setSubmitText('Добавляем...')
+        setIsLoading(true);
         api.addNewCard(card)
             .then(newCard => {
                 setCards([newCard, ...cards]);
@@ -120,7 +128,11 @@ function App() {
             .then(() => {
                 closeAllPopups();
             })
+            .then(() => {
+                setIsLoading(false)
+            })
             .catch(err => {
+                setIsLoading(false)
                 console.log(err)
             })
     }
@@ -160,25 +172,25 @@ function App() {
                         isOpen={isEditProfilePopupOpen}
                         onClose={closeAllPopups}
                         onUpdateUser={handleUpdateUser}
-                        submitText={submitText}
+                        isLoading={isLoading}
                     />
                     <EditAvatarPopup
                         isOpen={isEditAvatarPopupOpen}
                         onClose={closeAllPopups}
                         onUpdateAvatar={handleUpdateAvatar}
-                        submitText={submitText}
+                        isLoading={isLoading}
                     />
                     <AddPlacePopup
                         isOpen={isAddPlacePopupOpen}
                         onClose={closeAllPopups}
                         onSubmit={handleAddPlaceSubmit}
-                        submitText={submitText}
+                        isLoading={isLoading}
                     />
                     <DeletePopup
                         isOpen={isDeletePopupOpen}
                         onClose={closeAllPopups}
                         onSubmit={handleCardDelete}
-                        submitText={submitText}
+                        isLoading={isLoading}
                     />
                     <ImagePopup
                         isOpen={isCardPopupOpen}

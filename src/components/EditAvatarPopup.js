@@ -2,11 +2,11 @@ import React, {useContext, useEffect, useRef} from 'react';
 import PopupWithForm from "./PopupWithForm";
 import {CurrentUserContext} from "../contexts/CurrentUserContext";
 
-function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, submitText}) {
+function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, isLoading}) {
     const currentUser = useContext(CurrentUserContext);
-    const avatarRef = useRef('')
+    const avatarRef = useRef()
     useEffect(() => {
-        avatarRef.current.value = currentUser.avatar
+        avatarRef.current.value = ''
     }, [currentUser.avatar]);
 
     function handleSubmit(e) {
@@ -15,17 +15,19 @@ function EditAvatarPopup({isOpen, onClose, onUpdateAvatar, submitText}) {
     }
 
     return (
-        <PopupWithForm title={'Обновить аватар'}
-                       isOpen={isOpen}
-                       onSubmit={handleSubmit}
-                       onClose={onClose}
-                       submitText={submitText}
-                       name={'avatar-edit'}>
+        <PopupWithForm
+            title={'Обновить аватар'}
+            isOpen={isOpen}
+            onSubmit={handleSubmit}
+            onClose={onClose}
+            submitText={isLoading ? 'Сохраняем......' : 'Сохранить'}
+            name={'avatar-edit'}>
             <fieldset className="form__profile-info">
-                <input className="form__input form__input_avatar_url" type="url"
-                       placeholder="Ссылка на аватар"
-                       ref={avatarRef}
-                       name="avatar" id="avatar-url-input" required/>
+                <input
+                    className="form__input form__input_avatar_url" type="url"
+                    placeholder="Ссылка на аватар"
+                    ref={avatarRef}
+                    name="avatar" id="avatar-url-input" required/>
                 <span className="form__error avatar-url-input-error"/>
             </fieldset>
         </PopupWithForm>
